@@ -1,0 +1,65 @@
+clear all
+clc
+close all
+%% lista de Eb/N0
+listaEbN0=3:0.5:15; %dB
+
+listaEbN0lin=zeros(1,25); 
+for i=1:25                  %lineal
+  listaEbN0lin(i) = db2pow(listaEbN0(i));
+end
+
+%% M=2 %%
+M=2; %niveles
+Tb=10e-6; %tiempo de bit
+EbN0=15; %dB
+EbN0lin=db2pow(EbN0); %lineal 
+
+%% Errores M=2(Esta sección corre la simulación para cada Eb/n0 y cuenta los errores)
+errores=zeros(1,length(listaEbN0lin));
+for i=1:length(listaEbN0lin)
+   EbN0lin=listaEbN0lin(i);
+   sim('lab5sim.slx',10000*Tb)
+   resta=salida-entrada_delay;
+   cuenta=0;
+   for j=4:length(resta)
+       if resta(j)~=0
+           cuenta=cuenta+1;
+       end
+   end
+   errores(i)=cuenta;
+end
+%% Graficar M=2
+plot(listaEbN0,errores)
+title('M=2')
+xlabel('E_b/N_0')
+ylabel('# errores')
+
+%% M=4 %%
+M=4; %niveles
+Tb=10e-6; %tiempo de bit
+EbN0=15; %dB
+EbN0lin=db2pow(EbN0); %lineal 
+%% Errores M=4(Esta sección corre la simulación para cada Eb/n0 y cuenta los errores)
+errores4=zeros(1,length(listaEbN0lin));
+for i=1:length(listaEbN0lin)
+   EbN0lin=listaEbN0lin(i);
+   sim('lab5sim4_2017a.slx',10000*Tb)
+   resta=salida-entrada_delay;
+   cuenta=0;
+   for j=8:length(resta)
+       if resta(j)~=0
+           cuenta=cuenta+1;
+       end
+   end
+   errores4(i)=cuenta;
+end
+%% Graficar M=4
+figure
+plot(listaEbN0,errores4)
+title('M=4')
+xlabel('E_b/N_0')
+ylabel('# errores')
+
+
+
