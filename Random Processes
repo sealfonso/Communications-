@@ -1,0 +1,19 @@
+
+B=2.5*10^9;
+Fs=30*10^9;
+[a,b]=cheby1(14,0.5,(B/Fs),'low');
+[h,w]=freqz(a,b);
+y=abs(h);
+y2=db(y);
+plot((w/pi)*Fs,y2)
+
+%% Punto 2
+
+B2=1*10^9;
+C=(3*10^9);
+Fs=30*10^9;
+[a1,b1]=cheby1(5,0.5,[(C-B2) (C+B2)]/(Fs),'bandpass');
+[h1,w1]=freqz(a1,b1);
+y1=abs(h1);
+y3=db(y1);
+plot((w1/pi)*Fs,y3)
