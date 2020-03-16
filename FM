@@ -1,0 +1,15 @@
+f=500:500:15000;
+m=[];
+t=0:0.01:15000;
+fs=100e6;
+fp=10e9;
+m=zeros(30,1);
+for i=1:30
+   if i==1
+       m(i)=sin(2*pi*f(1)*t);
+   else
+   m(i)= m(i-1)+sin(2*pi*f(i)*t);
+   end
+   
+end
+
