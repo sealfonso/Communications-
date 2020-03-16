@@ -1,0 +1,37 @@
+%%Punto 1
+n=3;
+A=magic(n);
+r1y=sum(A);
+r1x=sum(A,2);
+v=n:-1:1;
+r2=v*A*v';
+invA=inv(A);
+r3=v*invA*v';
+r4=v'*v;
+rankr4=rank(r4);
+
+%% Punto 2
+
+f=2.5e9;
+t=0:1/(100*f):5/f;
+s1=abs(r3)*sin(2*pi*f*t);
+s2=abs(r3)*0.5*sawtooth(2*pi*f*t);
+s3=0.75*abs(r3)*square(2*pi*f*t,70);
+ssum=s1+s2+s3;
+subplot(1,2,1)
+grafs1=plot(t,s1);
+hold on
+grafs2=plot(t,s2);
+hold on
+grafs3=plot(t,s3);
+subplot(1,2,2)
+grafs1=plot(t*2/5,s1,':');
+hold on
+grafs2=plot(t*2/5,s2,':');
+hold on
+grafs3=plot(t*2/5,s3,':');
+hold on
+grafssum=plot(t*2/5,ssum);
+
+
+
