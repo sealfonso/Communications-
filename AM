@@ -1,0 +1,97 @@
+%lectura de los datos
+Data=csvread('data.csv',2,0,[2 0 50000 1]);
+Data(:,1)=Data(:,1)+0.25;
+
+fs=100e3; %frecuencia de muestreo
+
+%filtro pasa-bajas
+fl=2.5e3; %frecuencia de corte
+Rp=0.5; %Pico-Pico Rizado (dB)
+Wp=fl/fs; %Frecuencia de corte normalizada
+N=10000; %numero de puntos
+n=5; %Orden del filtro
+[b,a] = cheby1(n,Rp,2*Wp,'low');
+%[h,w] = freqz(b,a);
+%figure
+%plot(fs*w/(2*pi),20*log10(abs(h)))
+%ylim([-100 10])
+
+%filtro pasa-altas
+fh=900; %frecuencia de corte
+Rp=0.5; %Pico-Pico Rizado (dB)
+Wph=fh/fs; %Frecuencia de corte normalizada
+N=1000; %numero de puntos
+n=5; %Orden del filtro
+[bh,ah] = cheby1(n,Rp,2*Wph,'high');
+[h,w] = freqz(bh,ah);
+%figure
+%plot(fs*w/(2*pi),20*log10(abs(h)))
+%ylim([-100 10])
+
+figure
+[Xori,fori]=Fourier(original,fs);
+plot(fori,Xori)
+title('Espectro Original')
+xlabel('Frecuencia (Hz)')
+ylabel('Magnitud')
+
+figure
+[Xmod,fmod]=Fourier(modulada,fs);
+plot(fmod,Xmod)
+title('Espectro Modulado')
+xlabel('Frecuencia (Hz)')
+ylabel('Magnitud')
+
+figure
+[Xpll,fpll]=Fourier(pll,fs);
+plot(fpll,Xpll)
+title('Espectro Demodulado Antes del Filtro')
+xlabel('Frecuencia (Hz)')
+ylabel('Magnitud')
+
+figure
+[Xout,fout]=Fourier(simout,fs);
+plot(fout,Xout)
+title('Espectro de Salida')
+xlabel('Frecuencia (Hz)')
+ylabel('Magnitud')
+
+figure
+[Xori1,fori1]=Fourier(original1,fs);
+plot(fori1,Xori1)
+title('Espectro Original Ya Modulado')
+xlabel('Frecuencia (Hz)')
+ylabel('Magnitud')
+
+figure
+[Xpll1,fpll1]=Fourier(pll1,fs);
+plot(fpll1,Xpll1)
+title('Espectro Demodulado Antes del Filtro')
+xlabel('Frecuencia (Hz)')
+ylabel('Magnitud')
+
+figure
+[Xout1,fout1]=Fourier(simout1,fs);
+plot(fout1,Xout1)
+title('Espectro de Salida')
+xlabel('Frecuencia (Hz)')
+ylabel('Magnitud')
+
+%archivos de audio
+audiowrite('original.wav',original,fs)
+audiowrite('simout.wav',simout,fs)
+audiowrite('simout1.wav',simout1,fs) %osciloscopio
+
+//
+
+function [ X, f ] = Fourier( x, fs )
+%UNTITLED2 Summary of this function goes here
+%   Detailed explanation goes here
+L=length(x);
+X=abs(fft(x))/(L); %magnitud cuad normalizada de la transformada de Fourier 
+X=fftshift(X); %corrimiento del cero al centro
+f=(-L/2:L/2-1)*(fs/L); %definición vector de frecuencias
+
+
+end
+
